@@ -1,16 +1,16 @@
 package bean;
 
 public class User implements java.io.Serializable {
-	String operation;//ÃèÊö
-	long account;//ÕËºÅ QQºÅ
-	String password;//ÃÜÂë
-	String nick;//êÇ³Æ
-	int avatar;//Í·Ïñ
-	String trends;//Ç©Ãû
-	String sex;//ĞÔ±ğ
-	int age;//ÄêÁä
-	int lev;//¼¶±ğ
-	String time; //×¢²á
+	String operation;//æè¿°
+	long account;//è´¦å· QQå·
+	String password;//å¯†ç 
+	String nick;//æ˜µç§°
+	int avatar;//å¤´åƒ
+	String trends;//ç­¾å
+	String sex;//æ€§åˆ«
+	int age;//å¹´é¾„
+	int lev;//çº§åˆ«
+	String time; //æ³¨å†Œ
 
 	public String getOperation() {
 		return operation;

@@ -1,47 +1,67 @@
 package server;
 
-import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 
 public class YQServer
 {
-	int port = 9090;//¶¨ÒåÒ»¸ö½Ó¿Ú 
+	int port = 9090;//å®šä¹‰ä¸€ä¸ªæ¥å£ 
 	
 	public YQServer(int serverPort) {
 		port = serverPort;
 	}
 	
-	private ServerSocket serverSocket = null;//´´½¨ServerSocket³ÌĞò
+	private ServerSocket serverSocket = null;//åˆ›å»ºServerSocketç¨‹åº
 
 	public void start(){
 		
 		try
 		{
-			//´´½¨ServerSocket³ÌĞò,²¢ÇÒÉèÖÃ¶Ë¿Ú
+			//åˆ›å»ºServerSocketç¨‹åº,å¹¶ä¸”è®¾ç½®ç«¯å£
 			serverSocket = new ServerSocket(port);
-			System.out.println("·şÎñÆ÷ÒÑ¾­Æô¶¯"+new Date());
-			//µÈ´ıÁ¬½Ó
+			//System.out.println("æœåŠ¡å™¨å·²ç»å¯åŠ¨"+new Date());
+			//ç­‰å¾…è¿æ¥
 			while (true)
 			{
-				//»ñÈ¡¿Í»§¶ËÁ¬½Ó
+				//è·å–å®¢æˆ·ç«¯è¿æ¥
 				final Socket socket = serverSocket.accept();
-				//¿ªÆôÒ»¸öÏß³Ì,±ÜÃâ¶à¸öÁ¬½ÓÊ±,ĞÅÏ¢´¦Àí²»¹ıÀ´,ËùÒÔ¸øÃ¿Ò»¸öÁ¬½ÓnewÒÔ¸öÏß³Ì
+				//å¼€å¯ä¸€ä¸ªçº¿ç¨‹,é¿å…å¤šä¸ªè¿æ¥æ—¶,ä¿¡æ¯å¤„ç†ä¸è¿‡æ¥,æ‰€ä»¥ç»™æ¯ä¸€ä¸ªè¿æ¥newä»¥ä¸ªçº¿ç¨‹
 				new Thread() {
-					
 					public void run()
 					{
-						System.out.println(socket + "Á¬½Ó³É¹¦");
-						BufferedReader buffer;
+						System.out.println(socket + "è¿æ¥æˆåŠŸ");
+						//BufferedReader buffer;
 						try {
-							buffer = new BufferedReader(  
+							/*buffer = new BufferedReader(  
 							        new InputStreamReader(socket.getInputStream()));
-							 // ¶ÁÈ¡Êı¾İ  
+							 // è¯»å–æ•°æ®  
 			                String msg = buffer.readLine();  
-			                System.out.println("msg:" + msg);  
+			                System.out.println("msg:" + msg);  */
+							
+							//å»ºç«‹ä¸€ä¸ªåŒå‘é€šé“
+							DataInputStream readStream =  new DataInputStream(socket.getInputStream());
+							DataOutputStream writerStream = new DataOutputStream(socket.getOutputStream());
+							//è¯»å–æœåŠ¡å™¨è¿”å›çš„æ•°æ®
+							/*String dataString=null;
+							while ((dataString =readStream.readUTF()) !=null)
+							{
+								System.out.println("server"+dataString);
+							}*/
+							String mAccount = readStream.readUTF();
+							String mPwd = readStream.readUTF();
+							System.out.println("server"+mAccount);
+							System.out.println("server"+mPwd);
+							//writerStream.writeUTF("æˆ‘æ˜¯æœåŠ¡å™¨");
+							if ("123456".equals(mAccount) && "abc".equals(mPwd))
+							{
+								writerStream.writeBoolean(true);
+							}else {
+								writerStream.writeBoolean(false);
+							}
+							
 						} catch (IOException e) {
 							e.printStackTrace();
 						}  

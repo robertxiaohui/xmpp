@@ -4,14 +4,14 @@ public class XmppServer
 {
 
 	/**
-	 * ¹¦ÄÜ:TODO
+	 * åŠŸèƒ½:TODO
 	 * @param args 
 	 */
 	public static void main(String[] args)
 	{
 		
 		YQServer server = new YQServer(9090);
-		//Æô¶¯·şÎñÆ÷
+		//å¯åŠ¨æœåŠ¡å™¨
 		server.start();
 	}
 

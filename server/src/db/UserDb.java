@@ -7,10 +7,10 @@ import bean.User;
 public class UserDb
 {
 
-	//³õÊ¼»¯Ä£ÄâÓÃ»§
+	//åˆå§‹åŒ–æ¨¡æ‹Ÿç”¨æˆ·
 	private static HashMap<Long, User> users = new HashMap<Long, User>();
-	private static String[] sex = {"ÄĞ","Å®"};
-	//¾²Ì¬´úÂë¿é,Àà´´½¨µÄÊ±ºò,¾Í³õÊ¼»¯Êı¾İ
+	private static String[] sex = {"ç”·","å¥³"};
+	//é™æ€ä»£ç å—,ç±»åˆ›å»ºçš„æ—¶å€™,å°±åˆå§‹åŒ–æ•°æ®
 	static{
 		for (int i = 0; i <100; i++)
 		{

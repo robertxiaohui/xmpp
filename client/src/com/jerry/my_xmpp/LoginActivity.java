@@ -1,6 +1,8 @@
 package com.jerry.my_xmpp;
 
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -26,6 +28,7 @@ public class LoginActivity extends Activity implements OnCheckedChangeListener, 
 	private CheckBox mRemember;
 	private Button mLogin;
 	private Button mRegister;
+	private boolean	mIsTrue = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +49,41 @@ public class LoginActivity extends Activity implements OnCheckedChangeListener, 
 		mLogin = (Button) findViewById(R.id.login_btn_login);
 		mRegister = (Button) findViewById(R.id.login_btn_register);
 		
-		//¸øcheckboxÉèÖÃ×´Ì¬¸Ä±ä¼àÌıÊÂ¼ş
+		//ç»™checkboxè®¾ç½®çŠ¶æ€æ”¹å˜ç›‘å¬äº‹ä»¶
 		mRemember.setOnCheckedChangeListener(this);
-		//¸ø¶ÔÓ¦µÄ°´Å¥ÉèÖÃµã»÷ÊÂ¼ş
+		//ç»™å¯¹åº”çš„æŒ‰é’®è®¾ç½®ç‚¹å‡»äº‹ä»¶
 		mLogin.setOnClickListener(this);
 		mRegister.setOnClickListener(this);
 	}
 
-	//µ±°´Å¥±»µã»÷µÄÊ±ºò,µ÷ÓÃÕâ¸ö·½·¨
+	//å½“æŒ‰é’®è¢«ç‚¹å‡»çš„æ—¶å€™,è°ƒç”¨è¿™ä¸ªæ–¹æ³•
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.login_btn_login://µã»÷ÁËµÇÂ½
-			login();
-			Toast.makeText(this, "µÇÂ½", Toast.LENGTH_SHORT).show();
+		case R.id.login_btn_login://ç‚¹å‡»äº†ç™»é™†
+			if ("".equals(mAccount.getText().toString()))//è¾“å…¥è´¦å·ä¸ºç©º
+			{
+				Toast.makeText(this, "è¯·è¾“å…¥è´¦å·", Toast.LENGTH_SHORT).show();
+				return;
+			}else if ("".equals(mPwd.getText().toString())) {
+				
+				Toast.makeText(this, "è¯·è¾“å…¥å¯†ç ", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			if (!login())
+			{
+				Toast.makeText(this, "è´¦å·æˆ–è€…å¯†ç é”™è¯¯", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			Intent intent = new Intent(this,MainActivity.class);
+			startActivity(intent);
+			
+			
 			break;
 
-		case R.id.login_btn_register://µã»÷ÁËµÇÂ½
-			Toast.makeText(this, "×¢²á", Toast.LENGTH_SHORT).show();
+		case R.id.login_btn_register://ç‚¹å‡»äº†ç™»é™†
+			Toast.makeText(this, "æ³¨å†Œ", Toast.LENGTH_SHORT).show();
 			break;
 		default:
 			break;
@@ -71,33 +91,41 @@ public class LoginActivity extends Activity implements OnCheckedChangeListener, 
 		
 	}
 
-	//µ±checkboxÑ¡ÔñµÄ×´Ì¬¸Ä±äµÃÊ±ºò,µ÷ÓÃÕâ¸ö·½·¨
+	//å½“checkboxé€‰æ‹©çš„çŠ¶æ€æ”¹å˜å¾—æ—¶å€™,è°ƒç”¨è¿™ä¸ªæ–¹æ³•
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		if (isChecked) {
-			Toast.makeText(this, "Ñ¡ÖĞÁË", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "é€‰ä¸­äº†", Toast.LENGTH_SHORT).show();
 		}else {
-			Toast.makeText(this, "Ã»Ñ¡ÖĞ", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "æ²¡é€‰ä¸­", Toast.LENGTH_SHORT).show();
 			
 		}
 		
 	}
 	
-	public void login(){
+	public boolean login(){
 		new Thread(){
+			
+
 			public void run() {
 				
 				try
 				{
-					Socket socket = new Socket("192.168.1.161", 9090);
+					Socket socket = new Socket("192.168.8.17", 9090);
 					
-					 // »ñÈ¡ Client ¶ËµÄÊä³öÁ÷  
+					/* // è·å– Client ç«¯çš„è¾“å‡ºæµ  
 		            PrintWriter out = new PrintWriter(new BufferedWriter(  
 		                    new OutputStreamWriter(socket.getOutputStream())), true);  
-		            // Ìî³äĞÅÏ¢  
+		            // å¡«å……ä¿¡æ¯  
 		            out.println(mAccount.getText());  
-		            System.out.println("msg=" + mAccount.getText());  
-		            // ¹Ø±Õ  
+	  	            System.out.println("msg=" + mAccount.getText());  */
+					
+					//å»ºç«‹ä¸€ä¸ªåŒå‘é€šé“
+					DataInputStream readStream =  new DataInputStream(socket.getInputStream());
+					DataOutputStream writerStream = new DataOutputStream(socket.getOutputStream());
+					writerStream.writeUTF(mAccount.getText().toString());
+					writerStream.writeUTF(mPwd.getText().toString());
+					mIsTrue = readStream.readBoolean();
 				}
 				catch (UnknownHostException e)
 				{
@@ -110,8 +138,7 @@ public class LoginActivity extends Activity implements OnCheckedChangeListener, 
 			};
 		}.start();
 		
-		Intent intent = new Intent(this,MainActivity.class);
-		startActivity(intent);
+		return mIsTrue;
 	}
 	
 	
