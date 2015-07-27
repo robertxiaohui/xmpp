@@ -1,6 +1,8 @@
 package server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
@@ -33,6 +35,17 @@ public class YQServer
 					public void run()
 					{
 						System.out.println(socket + "连接成功");
+						BufferedReader buffer;
+						try {
+							buffer = new BufferedReader(  
+							        new InputStreamReader(socket.getInputStream()));
+							 // 读取数据  
+			                String msg = buffer.readLine();  
+			                System.out.println("msg:" + msg);  
+						} catch (IOException e) {
+							e.printStackTrace();
+						}  
+		               
 					}
 				}.start();
 			}

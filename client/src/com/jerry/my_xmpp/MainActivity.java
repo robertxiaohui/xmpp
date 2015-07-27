@@ -1,10 +1,14 @@
 package com.jerry.my_xmpp;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class MainActivity extends Activity
@@ -36,22 +40,6 @@ public class MainActivity extends Activity
 				return null;
 			}};*/
 			
-			new Thread(){
-				public void run() {
-					
-					try
-					{
-						Socket socket = new Socket("192.168.1.161", 9090);
-					}
-					catch (UnknownHostException e)
-					{
-						e.printStackTrace();
-					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
-				};
-			}.start();
+			
 	}
 }
